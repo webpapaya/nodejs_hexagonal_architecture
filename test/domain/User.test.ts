@@ -1,6 +1,6 @@
 import { describe, it } from '@jest/globals';
 import {assertThat, hasProperty, defined} from 'hamjest'
-import {User} from "../src/domain/User";
+import {User} from "../../src/domain/User";
 
 describe('User', () => {
     describe('when user is created', () => {
