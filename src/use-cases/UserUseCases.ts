@@ -7,5 +7,6 @@ export class UserUseCases {
   async create(name: string, email: string) {
     const user = User.create(name, email)
     await this.userRepository.save(user)
+    return user
   }
 }

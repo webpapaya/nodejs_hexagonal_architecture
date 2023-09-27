@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres
+    ports:
+      - 25432:5432
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=perspectice
+      - POSTGRES_PASSWORD=perspectice
+      - POSTGRES_DB=perspectice
