@@ -1,5 +1,7 @@
 import {User} from "./User";
 
 export interface UserRepository {
-  create(user: User): User
+  upsert(user: User): Promise<User>
+
+  findAll(): Promise<User[]>
 }
