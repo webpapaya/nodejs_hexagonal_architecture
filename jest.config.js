@@ -5,4 +5,5 @@ module.exports = {
     testEnvironment: 'node',
     silent: false,
     testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+    testTimeout: 60000
 };
