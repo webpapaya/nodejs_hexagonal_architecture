@@ -1,21 +1,18 @@
+import { randomUUID } from 'crypto'
+
 type UUID = string
 type Name = string
 type Email = string
 
-import { randomUUID } from 'crypto'
+export class User {
+  constructor(
+    public id: UUID,
+    public name: Name,
+    public email: Email,
+    public createdAt: Date,
+  ) {}
 
-// unique id, a name, a unique email address and a creation date
-class User(
-  id: UUID,
-  name: Name,
-  email: Email,
-  createdAt: Date,
-) {
-  static function create(
-    name: string,
-    email: string,
-  ) {
-    return User(
-    )
+  static create(name: string, email: string): User {
+    return new User(randomUUID(), name, email, new Date())
   }
 }
