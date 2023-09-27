@@ -1,5 +1,5 @@
 import {Order, UserRepository} from "../../domain/UserRepository";
-import {User} from "../../domain/User";
+import {Email, Name, User} from "../../domain/User";
 import {Client} from "pg";
 import SQL from "sql-template-strings";
 
@@ -27,8 +27,8 @@ export class UserPostgresRepository implements UserRepository {
 
     return result.rows.map((row) => new User(
       row.id,
-      row.name,
-      row.email,
+      new Name(row.name),
+      new Email(row.email),
       row.created_at
     ))
   }

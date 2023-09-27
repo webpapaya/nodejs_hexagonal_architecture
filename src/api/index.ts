@@ -2,6 +2,7 @@ import express, {Express, Request, Response} from 'express';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import {withDependencies} from "../infrastructure/dependencies";
+import {mapUsersToRestModel, mapUserToRestModel} from "./mapper";
 
 dotenv.config();
 
@@ -13,13 +14,13 @@ app.use(cors())
 app.post('/users', async (req: Request, res: Response) => withDependencies(async ({ userUseCases }) => {
   const user = await userUseCases.create(req.body.name, req.body.email);
 
-  res.send(user).status(201)
+  res.send(mapUserToRestModel(user)).status(201)
 }));
 
 app.get('/users', async (req: Request, res: Response) => withDependencies(async ({ userUseCases }) => {
   const users = await userUseCases.findAll();
 
-  res.send(users).status(200)
+  res.send(mapUsersToRestModel(users)).status(200)
 }));
 
 const port = process.env.PORT || 3111;
