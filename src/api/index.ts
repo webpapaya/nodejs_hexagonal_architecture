@@ -1,9 +1,7 @@
 import express, {Express, Request, Response} from 'express';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
-import {withPostgres} from "../infrastructure/persistence/connection";
-import {UserPostgresRepository} from "../infrastructure/persistence/UserPostgresRepository";
-import {UserUseCases} from "../use-cases/UserUseCases";
+import {withDependencies} from "../infrastructure/dependencies";
 
 dotenv.config();
 
@@ -12,23 +10,17 @@ app.use(cors())
   .use(express.json())
   .options('*', cors());
 
-app.post('/users', async (req: Request, res: Response) => {
-  await withPostgres(async (client) => {
-    const userRepository = new UserPostgresRepository(client)
-    const userUseCases = new UserUseCases(userRepository)
+app.post('/users', async (req: Request, res: Response) => withDependencies(async ({ userUseCases }) => {
+  const user = await userUseCases.create(req.body.name, req.body.email);
 
-    const user = await userUseCases.create(req.body.name, req.body.email);
+  res.send(user).status(201)
+}));
 
-    res.send(user).status(201)
-  })
-});
+app.get('/users', async (req: Request, res: Response) => withDependencies(async ({ userUseCases }) => {
+  const users = await userUseCases.findAll();
 
-app.get('/users', async (req: Request, res: Response) => {
-  await withPostgres(async (client) => {
-    const userRepository = new UserPostgresRepository(client)
-    res.send(await userRepository.findAll()).status(200)
-  })
-});
+  res.send(users).status(200)
+}));
 
 const port = process.env.PORT || 3111;
 app.listen(port, () => {

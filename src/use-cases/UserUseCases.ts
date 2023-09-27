@@ -9,4 +9,8 @@ export class UserUseCases {
     await this.userRepository.save(user)
     return user
   }
+
+  async findAll() {
+    return this.userRepository.findAll()
+  }
 }
