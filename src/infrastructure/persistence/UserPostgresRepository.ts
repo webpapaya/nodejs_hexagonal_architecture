@@ -6,7 +6,7 @@ import SQL from "sql-template-strings";
 export class UserPostgresRepository implements UserRepository {
   constructor(private client: Client) {}
 
-  async upsert(user: User): Promise<User> {
+  async save(user: User): Promise<User> {
     await this.client.query(SQL`
       insert into users (id, name, email, created_at)
       values(${user.id}, ${user.name}, ${user.email}, ${user.createdAt.toISOString()})

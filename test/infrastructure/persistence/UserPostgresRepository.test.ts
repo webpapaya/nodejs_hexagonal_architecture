@@ -5,12 +5,12 @@ import {User} from "../../../src/domain/User";
 import {assertThat, hasItem, hasProperty} from "hamjest";
 
 describe("UserPostgresRepository", () => {
-  describe('upsert', () => {
+  describe('save', () => {
     it("persists user in database", withPostgres(async (client) => {
       const user = User.create("some", "some@name.com");
 
       const repository = new UserPostgresRepository(client)
-      await repository.upsert(user)
+      await repository.save(user)
 
       assertThat(await repository.findAll(),
         hasItem(hasProperty('id', user.id)))
@@ -20,8 +20,8 @@ describe("UserPostgresRepository", () => {
       const user = User.create("some", "some@name.com");
 
       const repository = new UserPostgresRepository(client)
-      await repository.upsert(user)
-      await repository.upsert(user)
+      await repository.save(user)
+      await repository.save(user)
 
       assertThat(await repository.findAll(),
         hasProperty('length', 1))
