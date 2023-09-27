@@ -1,4 +1,4 @@
-import {UserRepository} from "../../domain/UserRepository";
+import {Order, UserRepository} from "../../domain/UserRepository";
 import {User} from "../../domain/User";
 import {Client} from "pg";
 import SQL from "sql-template-strings";
@@ -18,11 +18,12 @@ export class UserPostgresRepository implements UserRepository {
     return user
   }
 
-  async findAll(): Promise<User[]> {
-    const result = await this.client.query(SQL`
-      select id, name, email, created_at
-      from users
-    `)
+  async findAll(order?: { createdAt: Order}): Promise<User[]> {
+    const query = order?.createdAt === 'desc'
+      ? USER_CREATED_AT_DESC_QUERY
+      : USER_CREATED_AT_ASC_QUERY
+
+    const result = await this.client.query(query)
 
     return result.rows.map((row) => new User(
       row.id,
@@ -32,3 +33,15 @@ export class UserPostgresRepository implements UserRepository {
     ))
   }
 }
+
+const USER_CREATED_AT_ASC_QUERY = SQL`
+      SELECT id, name, email, created_at
+      FROM users
+      ORDER BY created_at ASC 
+  `
+
+const USER_CREATED_AT_DESC_QUERY = SQL`
+      SELECT id, name, email, created_at
+      FROM users
+      ORDER BY created_at DESC
+  `
