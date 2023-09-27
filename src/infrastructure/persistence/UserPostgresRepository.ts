@@ -10,6 +10,9 @@ export class UserPostgresRepository implements UserRepository {
     await this.client.query(SQL`
       insert into users (id, name, email, created_at)
       values(${user.id}, ${user.name}, ${user.email}, ${user.createdAt.toISOString()})
+      ON CONFLICT (id)
+      DO UPDATE SET name = EXCLUDED.name,
+                    email = EXCLUDED.email
     `)
 
     return user
