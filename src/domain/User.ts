@@ -14,6 +14,8 @@ export class User {
   static create(name: Name, email: Email): User {
     return new User(randomUUID(), name, email, new Date())
   }
+
+  // other domain operations like rename/...
 }
 
 export class Name {

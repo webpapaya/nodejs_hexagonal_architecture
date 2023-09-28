@@ -4,6 +4,7 @@ import {UserPostgresRepository} from "../../../src/infrastructure/persistence/Us
 import {Email, Name, User} from "../../../src/domain/User";
 import {assertThat, hasItem, hasProperty} from "hamjest";
 import {runAtTime, orderedByPropAsc, orderedByPropDesc} from "../../test-utils";
+import {Order} from "../../../src/domain/UserRepository";
 
 describe("UserPostgresRepository", () => {
   describe('save', () => {
@@ -52,7 +53,7 @@ describe("UserPostgresRepository", () => {
         repository.save(User.create(Name.of('second'), Email.of('second@user.com')))
       )
 
-      assertThat(await repository.findAll({createdAt: 'asc'}),
+      assertThat(await repository.findAll({createdAt: Order.ASC}),
         orderedByPropAsc('createdAt'))
     }))
 
@@ -65,7 +66,7 @@ describe("UserPostgresRepository", () => {
         repository.save(User.create(Name.of('second'), Email.of('second@user.com')))
       )
 
-      assertThat(await repository.findAll({createdAt: 'desc'}),
+      assertThat(await repository.findAll({createdAt: Order.DESC}),
         orderedByPropDesc('createdAt'))
     }))
   })

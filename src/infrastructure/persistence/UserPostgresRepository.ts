@@ -19,7 +19,7 @@ export class UserPostgresRepository implements UserRepository {
   }
 
   async findAll(order?: { createdAt: Order}): Promise<User[]> {
-    const query = order?.createdAt === 'desc'
+    const query = order?.createdAt === Order.DESC
       ? USER_CREATED_AT_DESC_QUERY
       : USER_CREATED_AT_ASC_QUERY
 

@@ -1,4 +1,4 @@
-import {UserRepository} from "../domain/UserRepository";
+import {Order, UserRepository} from "../domain/UserRepository";
 import {Email, Name, User} from "../domain/User";
 
 export class UserUseCases {
@@ -10,7 +10,7 @@ export class UserUseCases {
     return user
   }
 
-  async findAll() {
-    return this.userRepository.findAll()
+  async findAll(order: { createdAt: Order }) {
+    return this.userRepository.findAll(order)
   }
 }
