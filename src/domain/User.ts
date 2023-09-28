@@ -11,8 +11,8 @@ export class User {
     public createdAt: Date,
   ) {}
 
-  static create(name: string, email: string): User {
-    return new User(randomUUID(), Name.of(name), Email.of(email), new Date())
+  static create(name: Name, email: Email): User {
+    return new User(randomUUID(), name, email, new Date())
   }
 }
 
