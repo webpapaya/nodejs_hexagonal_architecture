@@ -1,5 +1,5 @@
 import {randomUUID} from 'crypto'
-import {InvalidEmailError, NotBlankError} from "./DomainErrors";
+import {InvalidEmailError, NotBlankError, TypeMismatchError} from "./DomainErrors";
 
 type UUID = string
 
@@ -18,18 +18,23 @@ export class User {
 
 export class Name {
   constructor(public value: string) {}
-  static of(name: string) {
-    if (name.length > 0) {
-      return new Name(name)
+  static of(name: unknown) {
+    if (typeof name !== "string") {
+      throw new TypeMismatchError("String expected")
+    } else if (name.length === 0) {
+      throw new NotBlankError("The name of a user can't be blank")
     }
-    throw new NotBlankError("The name of a user can't be blank")
+    return new Name(name)
+
   }
 }
 
 export class Email {
   constructor(public value: string) {}
-  static of(email: string) {
-    if (email.length === 0) {
+  static of(email: unknown) {
+    if (typeof email !== "string") {
+      throw new TypeMismatchError("String expected")
+    } else if (email.length === 0) {
       throw new NotBlankError("The email of a user can't be blank")
     } else if (!email.match(/.@./)) {
       throw new InvalidEmailError("The email provided was not valid")

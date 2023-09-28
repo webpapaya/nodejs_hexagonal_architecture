@@ -1,29 +1,18 @@
-import express, {Express, Request, Response} from 'express';
-import * as dotenv from 'dotenv';
-import cors from 'cors';
-import {withDependencies} from "../infrastructure/dependencies";
 import {mapUsersToRestModel, mapUserToRestModel} from "./mapper";
+import {Email, Name} from "../domain/User";
+import {parseSchema} from "../infrastructure/schema";
+import {app, endpoint} from "../infrastructure/rest";
 
-dotenv.config();
+app.post('/users', endpoint(async ({ req, res, dependencies: { userUseCases }}) => {
+  const { name, email } = parseSchema({ name: Name.of, email: Email.of }, req.body)
 
-const app: Express = express();
-app.use(cors())
-  .use(express.json())
-  .options('*', cors());
-
-app.post('/users', async (req: Request, res: Response) => withDependencies(async ({ userUseCases }) => {
-  const user = await userUseCases.create(req.body.name, req.body.email);
+  const user = await userUseCases.create(name, email);
 
   res.send(mapUserToRestModel(user)).status(201)
 }));
 
-app.get('/users', async (req: Request, res: Response) => withDependencies(async ({ userUseCases }) => {
+app.get('/users', endpoint(async ({ req, res, dependencies: { userUseCases }}) => {
   const users = await userUseCases.findAll();
 
   res.send(mapUsersToRestModel(users)).status(200)
 }));
-
-const port = process.env.PORT || 3111;
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
-});

@@ -2,7 +2,7 @@ import {UserUseCases} from "../use-cases/UserUseCases";
 import {withPostgres} from "./persistence/connection";
 import {UserPostgresRepository} from "./persistence/UserPostgresRepository";
 
-type Dependencies = {
+export type Dependencies = {
   userUseCases: UserUseCases
 }
 
