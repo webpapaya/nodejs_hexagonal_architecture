@@ -1,5 +1,5 @@
-import {orderedBy} from "hamjest";
-import {useFakeTimers} from "sinon";
+import { hasProperty, orderedBy, type PropertiesMatcher } from 'hamjest'
+import { useFakeTimers } from 'sinon'
 
 export const orderedByPropAsc = (prop: string) =>
   orderedBy((a, b) => a[prop] < b[prop])
@@ -7,10 +7,13 @@ export const orderedByPropAsc = (prop: string) =>
 export const orderedByPropDesc = (prop: string) =>
   orderedBy((a, b) => a[prop] > b[prop])
 
-export const runAtTime = <T>(date: Date, callback: () => T) => {
-  const clock = useFakeTimers({now: date});
+export const wasCalledOnce = (): PropertiesMatcher =>
+  hasProperty('calledOnce', true)
+
+export const runAtTime = async <T>(date: Date, callback: () => Promise<T>) => {
+  const clock = useFakeTimers({ now: date })
   try {
-    callback()
+    await callback()
   } finally {
     clock.restore()
   }

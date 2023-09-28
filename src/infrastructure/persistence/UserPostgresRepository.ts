@@ -1,12 +1,12 @@
-import {Order, UserRepository} from "../../domain/UserRepository";
-import {Email, Name, User} from "../../domain/User";
-import {Client} from "pg";
-import SQL from "sql-template-strings";
+import { Order, type UserRepository } from '../../domain/UserRepository'
+import { Email, Name, User } from '../../domain/User'
+import { type Client } from 'pg'
+import SQL from 'sql-template-strings'
 
 export class UserPostgresRepository implements UserRepository {
-  constructor(private client: Client) {}
+  constructor (private readonly client: Client) {}
 
-  async save(user: User): Promise<User> {
+  async save (user: User): Promise<User> {
     await this.client.query(SQL`
       insert into users (id, name, email, created_at)
       values(${user.id}, ${user.name}, ${user.email}, ${user.createdAt.toISOString()})
@@ -18,7 +18,7 @@ export class UserPostgresRepository implements UserRepository {
     return user
   }
 
-  async findAll(order?: { createdAt: Order}): Promise<User[]> {
+  async findAll (order?: { createdAt: Order }): Promise<User[]> {
     const query = order?.createdAt === Order.DESC
       ? USER_CREATED_AT_DESC_QUERY
       : USER_CREATED_AT_ASC_QUERY
